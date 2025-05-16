@@ -160,7 +160,7 @@ Changelog
 
 
 - **v1.1.3 - 2025-05-16** 
-  - Forked by zimmortal: 解决了 Include SSH 配置文件的问题
+  - Forked by zimmortal: The problem of the include configuration file has been solved
 
 - **v0.9.0**
     - xx
