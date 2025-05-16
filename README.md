@@ -159,8 +159,8 @@ Changelog
 ---------
 
 
-- **v1.1.3 
-  - Forked by zimmortal: 解决了 Include SSH 配置文件的问题**
+- **v1.1.3** 
+  - Forked by zimmortal: 解决了 Include SSH 配置文件的问题
 - **v0.9.0**
     - 
 - **v0.8.0 — 2018-03-17**
