@@ -158,6 +158,9 @@ If you need Alfred 2 support, check out [@isometry's workflow][ssh-breathe].
 Changelog
 ---------
 
+
+- **v1.1.0 
+  - Forked by zimmortal: 解决了 Include SSH 配置文件的问题**
 - **v0.9.0**
     - 
 - **v0.8.0 — 2018-03-17**
