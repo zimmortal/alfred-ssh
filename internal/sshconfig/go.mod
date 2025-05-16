@@ -1,4 +1,4 @@
-module github.com/yourname/alfred-ssh/internal/sshconfig
+module github.com/zimmortal/alfred-ssh/internal/sshconfig
 
 go 1.24.2
 
