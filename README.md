@@ -159,10 +159,11 @@ Changelog
 ---------
 
 
-- **v1.1.3** 
+- **v1.1.3 - 2025-05-16** 
   - Forked by zimmortal: 解决了 Include SSH 配置文件的问题
+
 - **v0.9.0**
-    - 
+    - xx
 - **v0.8.0 — 2018-03-17**
     - Add option to use `ssh` command instead of URL.
         Enables loading of local shell configuration before opening connection. #8
