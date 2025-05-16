@@ -20,10 +20,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/bmatcuk/doublestar"
 	"log"
 	"net/url"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -700,7 +702,54 @@ func loadHosts(o *options) []ssh.Host {
 		// log.Printf("[source/new/known_hosts] %s", aw.ShortenPath(SSHKnownHostsPath))
 	}
 	if !o.DisableConfig {
-		sources = append(sources, ssh.NewConfigSource(SSHUserConfigPath, "~/.ssh/config", PriorityUserConfig))
+		// 1. 读取主配置内容
+		data, err := os.ReadFile(SSHUserConfigPath)
+		if err == nil {
+			// 2. 找到所有 Include 模式
+			for _, line := range strings.Split(string(data), "\n") {
+				line = strings.TrimSpace(line)
+				if !strings.HasPrefix(line, "Include ") {
+					continue
+				}
+				parts := strings.Fields(line)
+				if len(parts) < 2 {
+					continue
+				}
+				pattern := parts[1]
+				// 支持 ~/ 展开
+				if strings.HasPrefix(pattern, "~") {
+					if home, e := os.UserHomeDir(); e == nil {
+						pattern = filepath.Join(home, pattern[1:])
+					}
+				}
+				// 相对路径相对主配置目录
+				if !filepath.IsAbs(pattern) {
+					pattern = filepath.Join(filepath.Dir(SSHUserConfigPath), pattern)
+				}
+				// 3. Glob 并排序
+				matches, _ := doublestar.Glob(pattern)
+				sort.Strings(matches)
+				// 4. 为每个子文件新建 source
+				for _, f := range matches {
+					sources = append(sources,
+						ssh.NewConfigSource(
+							f,
+							filepath.Base(f),
+							PriorityUserConfig,
+						),
+					)
+				}
+			}
+		}
+		// 5. 最后加回主配置
+		name := filepath.Base(SSHUserConfigPath)
+		sources = append(sources,
+			ssh.NewConfigSource(
+				SSHUserConfigPath,
+				name,
+				PriorityUserConfig,
+			),
+		)
 		// log.Printf("[source/new/config] %s", aw.ShortenPath(SSHUserConfigPath))
 	}
 	if !o.DisableEtcConfig {

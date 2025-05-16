@@ -12,11 +12,10 @@ import (
 	"fmt"
 	"log"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 
-	"github.com/havoc-io/ssh_config"
+	"github.com/deanishe/alfred-ssh/internal/sshconfig"
 )
 
 // ConfigHost is Host parsed from SSH config-format files.
@@ -104,12 +103,9 @@ func (s *ConfigSource) Hosts() []Host {
 // parseConfigFile parse an SSH config file.
 func parseConfigFile(path string) []*ConfigHost {
 	var hosts []*ConfigHost
-	r, err := os.Open(path)
-	if err != nil {
-		log.Printf("[config/%s] Error opening file: %s", path, err)
-		return hosts
-	}
-	cfg, err := ssh_config.Parse(r)
+
+	// 直接用你在 internal/sshconfig 定义的 ParseFile
+	cfg, err := sshconfig.ParseFile(path)
 	if err != nil {
 		log.Printf("[config/%s] Parse error: %s", path, err)
 		return hosts
@@ -117,55 +113,53 @@ func parseConfigFile(path string) []*ConfigHost {
 
 	for _, e := range cfg.Hosts {
 		var (
-			p    *ssh_config.Param
+			p    *sshconfig.Param
 			port = 22
 			hn   string // hostname
 			user string
 		)
 
-		p = e.GetParam(ssh_config.HostKeyword)
+		// 原来的字段提取逻辑不变
+		p = e.GetParam(sshconfig.HostKeyword)
 		if p != nil {
 			hn = p.Value()
 		}
 
-		// log.Println(e.String())
-		// log.Printf("hostnames=%v", e.Hostnames)
-
-		p = e.GetParam(ssh_config.HostNameKeyword)
+		p = e.GetParam(sshconfig.HostNameKeyword)
 		if p != nil {
 			hn = p.Value()
 		}
 
-		p = e.GetParam(ssh_config.PortKeyword)
+		p = e.GetParam(sshconfig.PortKeyword)
 		if p != nil {
-			port, err = strconv.Atoi(p.Value())
-			if err != nil {
-				log.Printf("Bad port: %s", err)
-				port = 22
+			if i, err := strconv.Atoi(p.Value()); err == nil {
+				port = i
+			} else {
+				log.Printf("Bad port in %s: %s", path, err)
 			}
 		}
-		// log.Printf("port=%v", port)
 
-		p = e.GetParam(ssh_config.UserKeyword)
+		p = e.GetParam(sshconfig.UserKeyword)
 		if p != nil {
 			user = p.Value()
 		}
 
 		for _, n := range e.Hostnames {
-			if strings.Contains(n, "*") || strings.Contains(n, "!") || strings.Contains(n, "?") {
+			if strings.ContainsAny(n, "*!?") {
 				continue
 			}
 
-			h := &ConfigHost{}
-			h.name = n
-			h.hostname = n
-			h.port = port
-			h.username = user
-
+			h := &ConfigHost{
+				BaseHost: BaseHost{
+					name:     n,
+					hostname: n,
+					port:     port,
+					username: user,
+				},
+			}
 			if hn != "" {
 				h.hostname = hn
 			}
-			// log.Printf("%+v", host)
 			hosts = append(hosts, h)
 		}
 	}

@@ -7,3 +7,4 @@
 # Vim turds
 /tags
 *.swp
+.idea
