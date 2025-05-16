@@ -33,11 +33,11 @@ import (
 
 	"os/exec"
 
-	ssh "github.com/deanishe/alfred-ssh"
 	aw "github.com/deanishe/awgo"
 	"github.com/deanishe/awgo/fuzzy"
 	"github.com/deanishe/awgo/update"
 	"github.com/deanishe/awgo/util"
+	ssh "github.com/zimmortal/alfred-ssh"
 
 	docopt "github.com/docopt/docopt-go"
 )

@@ -10,12 +10,11 @@ package ssh
 
 import (
 	"fmt"
+	"github.com/zimmortal/alfred-ssh/internal/sshconfig"
 	"log"
 	"net/url"
 	"strconv"
 	"strings"
-
-	"github.com/deanishe/alfred-ssh/internal/sshconfig"
 )
 
 // ConfigHost is Host parsed from SSH config-format files.

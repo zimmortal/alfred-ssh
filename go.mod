@@ -4,7 +4,6 @@ go 1.24.2
 
 require (
 	github.com/bmatcuk/doublestar v1.3.4
-	github.com/zimmortal/alfred-ssh/internal/sshconfig latest
 	github.com/deanishe/awgo v0.20.2
 	github.com/disintegration/imaging v1.6.0
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
