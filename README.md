@@ -17,12 +17,14 @@ Open SSH/SFTP/mosh connections from [Alfred 3][alfredapp] with autosuggestions b
     - [Commands](#commands)
     - [Using iTerm2](#using-iterm2)
 - [Licensing & thanks](#licensing--thanks)
+- [How to build](#how-to-build)
 - [Changelog](#changelog)
 
 <!-- /MarkdownTOC -->
 
 <a id="features"></a>
-Features
+### Features ###
+
 --------
 
 - Auto-suggest hostnames
@@ -40,14 +42,16 @@ Features
 
 
 <a id="installation"></a>
-Installation
+### Installation ###
+
 ------------
 
 Download [the latest release][gh-releases] and double-click the file to install in Alfred.
 
 
 <a id="usage"></a>
-Usage
+### Usage ###
+
 -----
 
 The main keyword is `ssh`:
@@ -71,7 +75,8 @@ Configuration is managed with `sshconf`:
 
 
 <a id="configuration"></a>
-Configuration
+### Configuration ###
+
 -------------
 
 Sources can be configured from within the workflow using the `sshconf` keyword. Other settings are managed via the [workflow's configuration sheet][confsheet].
@@ -134,7 +139,8 @@ If you'd prefer to use iTerm2 rather than Terminal.app, there are two steps:
 ![iTerm2 > Preferences > PROFILE_NAME > General > URL Schemes](assets/iTerm2.png)
 
 <a id="licensing--thanks"></a>
-Licensing & thanks
+### Licensing & thanks ###
+
 ------------------
 
 This workflow is released under the [MIT Licence][mit].
@@ -154,8 +160,22 @@ This workflow started as a port of [@isometry's][isometry] Python [SSH workflow]
 If you need Alfred 2 support, check out [@isometry's workflow][ssh-breathe].
 
 
+<a id="how-to-build"></a>
+### How to build ###
+
+------------------
+#### Build for macOS Intel ####
+```bash
+GOOS=darwin GOARCH=amd64 go build -o assh-amd64 cmd/assh/assh.go
+```
+#### Build for macOs ARM64 ####
+```bash
+GOOS=darwin GOARCH=arm64 go build -o assh-arm64 cmd/assh/assh.go
+```
+
 <a id="changelog"></a>
-Changelog
+### Changelog ###
+
 ---------
 
 
